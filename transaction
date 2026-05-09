@@ -1,0 +1,30 @@
+
+//purpose of this is to make transaction tracking clearer, sometimes names overlap
+//but if we track by a special number we can skip over the hassle of finding a name.
+public class transaction {
+    private String transactionId;
+    private String name;
+    private double amount;
+    private String transactionType; // "deposit" or "withdrawal"
+
+
+    public transaction(String transactionId, String name, double amount, String transactionType) {
+        this.transactionId = transactionId;
+        this.name = name;
+        this.amount = amount;
+        this.transactionType = transactionType; 
+}
+
+public String getTransactionId() {
+    return transactionId;
+}
+public String getName() {
+    return name;
+}
+public double getAmount() {
+    return amount;
+}
+public String getTransactionType() {
+    return transactionType;
+}
+}
