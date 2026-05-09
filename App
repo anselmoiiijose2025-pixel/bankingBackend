@@ -1,0 +1,127 @@
+import java.util.Scanner;
+public class App {
+    public static void main(String[] args) throws Exception {
+
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Hello, World!");
+        String input = null;
+        bankingBackend bank = new bankingBackend();
+        //next time implement switch cases s
+
+        /*
+        switch (input.toLowerCase()){
+        
+        case
+        case
+        case
+        
+        }
+        */
+        while(true){
+        
+            System.out.println("Log in - Create User - Exit");
+            input = sc.nextLine();
+
+            while(!input.equalsIgnoreCase("log in") &&
+            !input.equalsIgnoreCase("create user") &&
+            !input.equalsIgnoreCase("exit")){
+                  System.out.println("Please enter a valid action or exit");
+                input = sc.nextLine();
+            }
+
+               if(input.equalsIgnoreCase("Exit")){
+                break;
+            }
+
+            boolean validate = false;
+
+            if(input.equalsIgnoreCase("Create User")){
+
+                while(!validate){
+                    System.out.println("Enter username: (First Last, online, etc.)");
+                    String user = sc.nextLine();
+
+                    while(user.isBlank()){
+                          System.out.println("Invalid, user cannot be empty  ");
+                    user = sc.nextLine();
+                    }
+                    
+                    System.out.print("Enter an email: ");
+                    String email = sc.nextLine();
+                    while(email.isBlank()){
+
+                          System.out.println("Invalid, email cannot be empty");
+                          System.out.println("Re-enter email: ");
+                    email = sc.nextLine();
+                    }
+
+                    while(true){
+                        System.out.print("Enter a password: ");
+                        String pass = sc.nextLine();
+
+                        if(pass.isBlank()){
+                            System.out.println("Password cannot be empty");
+                            continue; 
+                        }
+
+                        /*everything after this will just keep asking for a valid password 
+                        It will break the while and validate is true when you finally have a correct password
+                        */
+                        validate = bank.createUser(user,email,pass);
+                        
+                        if(validate){
+                            System.out.println("Successfully created account!");
+                            break;
+                        } else {
+                             System.out.println("Invalid data (email exists or password rules not met). Try again password.");
+                        }
+                    }
+                }
+            }
+            if(input.equalsIgnoreCase("Log in")){
+                boolean validateEntry = false;
+                int count = 0;
+                do{
+                      System.out.println("Enter email: ");
+                String eMail = sc.nextLine();
+
+                System.out.println("Enter password: ");
+                String passW = sc.nextLine();
+                    //will always pass but will always come back to if password or email is wrong
+                user currentUser = bank.getUser(eMail);
+                    
+                /*object object name = something holding your data.accessor data(paramater for data ) */
+                if(currentUser !=null  && 
+                    passW.equals(currentUser.getPassword())){
+                     System.out.println("Log in successful! ");
+                    validateEntry = true;
+                    
+                } else{
+                    System.out.println("Invalid email or password");
+                    count++;
+                    if(count==3){
+                        System.out.println("Too many failed attempts");
+                        break;
+                    }
+                    //after this, the program will go back to the top and ask again with a new count value
+                }
+                //the reason it goes back because the if statement comes after user input
+                }while(count < 3 && !validateEntry);
+            }
+
+        //after u log in, what can they do?
+
+
+
+
+            
+        }
+        sc.close();
+        //you wanna call whiles and do whiles for incorrect/invalid inputs, subjective inputs specific to users 21:46
+        /*
+        the validation from the whiles/do whiles will validate the inputs(calling the methods) NOT the outputs (method results)
+        scrap some of the backend method here because majority of it doesn't need to be inside a method 21:48
+        tomorrow, just work around it! take hours if you have to!
+        */
+    } 
+}
