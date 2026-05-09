@@ -1,0 +1,48 @@
+import java.util.HashMap;
+
+public class bankingBackend {
+    //the do while/while loops are are for business logic, trying to create negative balances, objective numbers. 21:46
+    
+     private static HashMap<String, transaction> transactions = new HashMap<>(); //stores by transactionID
+     private static HashMap<String, user> users = new HashMap<>(); //stores by userID
+
+     public bankingBackend(){
+        transactions = new HashMap<>();
+        users = new HashMap<>();
+     }
+     //log into the bank, if they fail 3 times, no directions for their password, they'll be locked out
+     //account will be frozen too.
+
+     public boolean createUser(String theName, String theEmail, String thePassword){
+        if(users.containsKey(theEmail)){
+            System.out.println("Sorry this email already exists");
+        return false;
+        }
+        String domain = theEmail.substring(theEmail.indexOf("@"));
+        if(!domain.equals("@gmail.com") &&
+    !domain.equals("@yahoo.com") && 
+    !domain.equals("@outlook.com") &&
+    !domain.equals("@icloud.com") &&
+    !domain.equals("@hotmail.com")){
+            System.out.println("This domain is invalid");
+            return false;
+        }
+        if(thePassword.length() < 10){
+            System.out.println("Password does not meet the requirements");
+            return false; //will return false if any variables are incorrect
+        }
+        user newUser = new user(theName, thePassword, theEmail);
+        users.put(theEmail,newUser);
+        return true;
+     }
+    public user getUser(String email){
+        return users.get(email);
+    }
+    public transaction getTransaction(String transactionId){
+        return transactions.get(transactionId);
+    }
+     //set a password, has to correctly recall old password 
+     
+     // wel'll create a transaction method at the end. (deposit / withdraw)
+
+}
