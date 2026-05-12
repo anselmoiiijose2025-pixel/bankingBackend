@@ -1,0 +1,45 @@
+/*
+loggedInSession will be a boolean method and will be set to false initially until logged in
+we'll create this class in the top of the main program 
+
+my idea for this is that after successfully logging in it'll leave the log in page 
+ill use a setter to set the loggedinclass after successfully logging in
+
+we'll use transactions in loggedInSession to identfiy the transactions and users effectively. 
+*/
+import java.util.HashMap;
+import java.util.Scanner;
+public class loggedInSession {
+    private static HashMap<String,transaction> transactions = new HashMap<>();
+ 
+    //create a logIn method here to make the nesting cleaner.
+    public loggedInSession(){
+        transactions = new HashMap<>();
+        }      
+    
+    public void theSession(Scanner scInput, bankingBackend bank, user currentUser){
+        while(true){
+
+            /*
+            imma call methods inside loggedInSession 
+            switch scInput.equalsIgnoreCase(()){
+            case deposit > scanner and business logic
+            case transfer > scanner and business logic
+            case delete account > scanner and business logic
+            case withdraw > scanner and business logic
+            }
+            */
+        }
+    }
+    //the methods will be outside theSession to make sure its clean.
+
+    //deposit
+
+    //delete account
+
+    //transfer
+
+    //withdraw
+
+
+}
