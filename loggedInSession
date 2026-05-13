@@ -19,7 +19,83 @@ public class loggedInSession {
     
     public void theSession(Scanner scInput, bankingBackend bank, user currentUser){
         while(true){
+            
+            System.out.println("Hello " + currentUser.getName()+ "\nWhat would you like to do?");
+            System.out.println("Current Balance: " + currentUser.getBalance());
+            System.out.println("Deposit - Transfer - Withdraw - Delete Account - Exit");
 
+            String choice = scInput.nextLine();
+            switch (choice.toLowerCase()){
+
+                case "deposit":
+                    System.out.println("How much money would you like to deposit?"); //there needs to be a way to verify this externally
+                    int money = scInput.nextInt();
+                    while(money < 5.00){
+                         System.out.println("Please enter a valid amount:");
+                         money = scInput.nextInt();
+                    }
+                    depositMoney(money,currentUser);
+                    break;
+
+                case "transfer":// work in progress, there should be a way i can do this and then check upon another account
+
+                case "withdraw":
+                System.out.println("How much money would you like to withdraw?");
+                    int withdrawalAmount = scInput.nextInt();
+                    if(currentUser.getBalance() <= 5.00){
+                        System.out.println("Sorry, unable to do this action at this time ");
+                    }
+
+                    while(withdrawalAmount >= currentUser.getBalance() || withdrawalAmount < 5.00){
+                        System.out.println("Sorry, funds do not allow withdrawal");
+                        System.out.println("Enter another amount");
+                        withdrawalAmount = scInput.nextInt();
+                    }
+
+                    withdrawMoney(withdrawalAmount,currentUser);
+                    break;
+
+                case "delete account":
+                    System.out.println("Are you sure about this? YES or NO (ALL CAPS)");
+                    String decision = scInput.nextLine();
+                    
+                    while(!decision.equals("YES") && !decision.equals("NO")){
+                        System.out.println("invalid statement, try again");
+                        decision = scInput.nextLine();
+                    }
+
+                    switch (decision){
+                        case "YES":
+                        String verify = null;
+                          System.out.println("Please enter your password") ;
+                           verify = scInput.nextLine();
+                           int count = 3;
+
+                           while(!verify.equals(currentUser.getPassword()) && count > 0){
+                            count--;
+                            System.out.println("You have " + (count) + " tries left");
+                            verify = scInput.nextLine();
+                           }
+
+                           if(verify.equals(currentUser.getPassword())){
+                            bank.removeUser(currentUser.getName());
+                                System.out.println("Deleted " + currentUser.getName() + "'s account");
+                                break;
+                           }
+                           
+
+                        case "NO":
+                            System.out.println("Going back to homescreen...");
+                            theSession(scInput, bank, currentUser);
+                            break;
+                    }
+                case "exit":
+                        System.out.println("Thank you for using us!");
+                        return;
+                default:
+                    System.out.println("Please select one of the available options");
+                    break;
+            }
             /*
             imma call methods inside loggedInSession 
             switch scInput.equalsIgnoreCase(()){
@@ -32,14 +108,28 @@ public class loggedInSession {
         }
     }
     //the methods will be outside theSession to make sure its clean.
-
+    public void depositMoney(double amount, user theUser){
+        theUser.setBalance(theUser.getBalance()+amount);
+            System.out.println("Deposited " + amount + " to " + theUser.getName() + "'s account");
+    }
     //deposit
 
     //delete account
+    public void deleteAccount(user theUser){
 
+    }
     //transfer
-
+        //check if another account exists and if so we'll see you have enough funds then we'll add it to the transactions list
     //withdraw
-
+    public void withdrawMoney(double amount, user theUser){
+        theUser.setBalance(theUser.getBalance()-amount);
+            System.out.println("Withdrew " + amount + " to " + theUser.getName() + "'s account");
+    }
 
 }
+//test password and email and user
+/*
+1234
+1234@gmail.com
+1234qweras
+*/
