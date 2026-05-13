@@ -70,7 +70,7 @@ public class App {
                     }
 
                     while(true){
-                        System.out.print("Enter a password: ");
+                        System.out.println("Enter a password: (OR TYPE EXIT to restart)");
                         String pass = sc.nextLine();
 
                         if(pass.isBlank()){
@@ -88,6 +88,9 @@ public class App {
                             break;
                         } else {
                              System.out.println("Invalid data (email exists or password rules not met). Try again password.");
+                        }
+                        if(pass.equals("EXIT")){
+                            break;
                         }
                     }
                 }
