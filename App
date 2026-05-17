@@ -1,14 +1,21 @@
 import java.util.Scanner;
 public class App {
-    
+    static class InvalidPasswordException extends Exception{
+    public InvalidPasswordException(String message){
+         super(message);
+    }
+}
     public static void main(String[] args) throws Exception {
-        boolean validateEntry = false;
-        loggedInSession sesh = new loggedInSession();
+
         user currentUser = null;
         Scanner sc = new Scanner(System.in);
+        loggedInSession sesh = new loggedInSession();
+        bankingBackend bank = new bankingBackend();
+
         System.out.println("Hello, World!");
         String input = null;
-        bankingBackend bank = new bankingBackend();
+        boolean validateEntry = false;
+    
     
         while(true){
         
@@ -21,7 +28,7 @@ public class App {
                 validateEntry = false;
                 int count = 0;
                 do{
-                      System.out.println("Enter email: ");
+                System.out.println("Enter email: ");
                 String eMail = sc.nextLine();
                 
                 System.out.println("Enter password: ");
@@ -42,8 +49,8 @@ public class App {
                     System.out.println("Invalid email or password");
                     count++;
                     if(count==3){
-                        System.out.println("Too many failed attempts");
-                        break;
+                        throw new InvalidPasswordException("Too many failed attempts");
+                        //break; this 
                     }
                     //after this, the program will go back to the top and ask again with a new count value
                 }
@@ -52,6 +59,7 @@ public class App {
                 break;
 
             case "create user":
+
                 while(!validate){
                     System.out.println("Enter username: (First Last, online, etc.)");
                     String user = sc.nextLine();
@@ -63,25 +71,25 @@ public class App {
                     
                     System.out.print("Enter an email: ");
                     String email = sc.nextLine();
-                    while(!email.contains("@")){
+                    while(!email.contains("@")){// specify domains
                           System.out.println("Invalid, email cannot be empty");
                           System.out.println("Re-enter email: ");
                     email = sc.nextLine();
                     }
 
                     while(true){
-                        System.out.println("Enter a password: (OR TYPE EXIT to restart)");
+                        System.out.println("Enter a password: (or type EXIT to restart)");
                         String pass = sc.nextLine();
-
+                    
                         if(pass.isBlank()){
                             System.out.println("Password cannot be empty");
-                            continue; 
+                            continue; //runs program egardless 
                         }
 
                         /*everything after this will just keep asking for a valid password 
                         It will break the while and validate is true when you finally have a correct password
                         */
-                        validate = bank.createUser(user,email,pass);
+                        validate = bank.createUser(user,email,pass); //either becomes true or stays false
                         
                         if(validate){
                             System.out.println("Successfully created account!");
@@ -94,10 +102,11 @@ public class App {
                         }
                     }
                 }
-                break;
+                break;//program goes back to start
+            
             case "exit":
                 System.out.println("Thank you for using us!");
-                return;
+                return;//program ends
             default: 
                 System.out.println("Please enter a valid action or type exit");
                 break;
