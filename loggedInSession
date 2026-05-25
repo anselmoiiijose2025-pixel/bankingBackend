@@ -13,15 +13,12 @@ public class loggedInSession {
     private static HashMap<String,transaction> transactions = new HashMap<>();
  
     //create a logIn method here to make the nesting cleaner.
-    public loggedInSession(){
-        transactions = new HashMap<>();
-        }      
-    
-    public void theSession(Scanner scInput, bankingBackend bank, user currentUser){
+    public void theSession(Scanner scInput, bankingBackend bank, user cU){
+
         while(true){
             
-            System.out.println("Hello " + currentUser.getName()+ "\nWhat would you like to do?");
-            System.out.println("Current Balance: " + currentUser.getBalance());
+            System.out.println("Hello " + cU.getName()+ "\nWhat would you like to do?");
+            System.out.println("Current Balance: " + cU.getBalance());
             System.out.println("Deposit - Transfer - Withdraw - Delete Account - Exit");
 
             String choice = scInput.nextLine();
@@ -29,30 +26,59 @@ public class loggedInSession {
 
                 case "deposit":
                     System.out.println("How much money would you like to deposit?"); //there needs to be a way to verify this externally
-                    int money = scInput.nextInt();
+                    double money = scInput.nextInt();
+                    scInput.nextLine();
+
                     while(money < 5.00){
                          System.out.println("Please enter a valid amount:");
                          money = scInput.nextInt();
                     }
-                    depositMoney(money,currentUser);
+                    depositMoney(money,cU);
+                    transaction d = new transaction(cU.getName(),cU.getEmail(),money, "Deposit");
+                    transactions.put(d.getEmail(), d);
                     break;
 
                 case "transfer":// work in progress, there should be a way i can do this and then check upon another account
-
-                case "withdraw":
-                System.out.println("How much money would you like to withdraw?");
-                    int withdrawalAmount = scInput.nextInt();
-                    if(currentUser.getBalance() <= 5.00){
-                        System.out.println("Sorry, unable to do this action at this time ");
+                HashMap<String,user> userHash = bank.getUserHash();
+                    System.out.println("Enter the user you would like to transfer funds to:");
+                    String receivingUser = scInput.nextLine();
+                    while(!userHash.containsKey(receivingUser)){
+                            System.out.println("Please enter a valid user: ");
+                            receivingUser = scInput.nextLine();
                     }
+                    user receipient = bank.getUserByName(receivingUser);
 
-                    while(withdrawalAmount >= currentUser.getBalance() || withdrawalAmount < 5.00){
-                        System.out.println("Sorry, funds do not allow withdrawal");
+                    double currentBalance = cU.getBalance();
+                    System.out.println("Please enter an amount NOT exceeding " + currentBalance);
+                    double transferringAmount = scInput.nextDouble();
+
+                    while(transferringAmount > currentBalance){
+                        System.out.println("Please re-enter a valid amount...");
+                        transferringAmount = scInput.nextDouble();
+                    }
+                    System.out.println("Transferring" + transferringAmount + " to user " + receipient.getName());
+                    depositMoney(transferringAmount, receipient);
+                    withdrawMoney(transferringAmount, cU);
+                    System.out.println(cU.getName()+ "'s balance is now " + (double) (currentBalance-transferringAmount));
+                    break;
+                case "withdraw":
+                System.out.println("Current Balance: " + cU.getBalance());
+                System.out.println("How much money would you like to withdraw?");
+                    double withdrawalAmount = scInput.nextInt();
+
+                    while(withdrawalAmount < 5.00){
+                        if(cU.getBalance() >= withdrawalAmount){
+                            System.out.println("Withdrawal amount greater than balance..");
+                        }else{
+                            System.out.println("Sorry, funds do not allow withdrawal");
+                        }
                         System.out.println("Enter another amount");
                         withdrawalAmount = scInput.nextInt();
+                        scInput.nextLine();
                     }
-
-                    withdrawMoney(withdrawalAmount,currentUser);
+                    withdrawMoney(withdrawalAmount,cU);
+                    transaction w = new transaction(cU.getName(),cU.getEmail(),withdrawalAmount, "withdraw");
+                    transactions.put(w.getEmail(), w);
                     break;
 
                 case "delete account":
@@ -71,22 +97,21 @@ public class loggedInSession {
                            verify = scInput.nextLine();
                            int count = 3;
 
-                           while(!verify.equals(currentUser.getPassword()) && count > 0){
+                           while(!verify.equals(cU.getPassword()) && count > 0){
                             count--;
                             System.out.println("You have " + (count) + " tries left");
                             verify = scInput.nextLine();
                            }
 
-                           if(verify.equals(currentUser.getPassword())){
-                            bank.removeUser(currentUser.getName());
-                                System.out.println("Deleted " + currentUser.getName() + "'s account");
+                           if(verify.equals(cU.getPassword())){
+                            bank.removeUser(cU.getName());
+                                System.out.println("Deleted " + cU.getName() + "'s account");
                                 break;
                            }
                            
-
+                           break;
                         case "NO":
                             System.out.println("Going back to homescreen...");
-                            theSession(scInput, bank, currentUser);
                             break;
                     }
                 case "exit":
@@ -109,27 +134,35 @@ public class loggedInSession {
     }
     //the methods will be outside theSession to make sure its clean.
     public void depositMoney(double amount, user theUser){
-        theUser.setBalance(theUser.getBalance()+amount);
-            System.out.println("Deposited " + amount + " to " + theUser.getName() + "'s account");
+        theUser.addBalance(amount);
+        System.out.println("Deposited " + amount + " to " + theUser.getName() + "'s account");
     }
     //deposit
-
-    //delete account
-    public void deleteAccount(user theUser){
-
-    }
     //transfer
-        //check if another account exists and if so we'll see you have enough funds then we'll add it to the transactions list
+    //check if another account exists and if so we'll see you have enough funds then we'll add it to the transactions list
+    public void transferFunds(double amount, user theSender, String receiverEmail){
+    
+    }
     //withdraw
     public void withdrawMoney(double amount, user theUser){
-        theUser.setBalance(theUser.getBalance()-amount);
-            System.out.println("Withdrew " + amount + " to " + theUser.getName() + "'s account");
+        double currentBalance = theUser.getBalance();
+        theUser.subtractBalance(amount);
+         System.out.println(currentBalance);
+         System.out.println(theUser.getBalance());
+         System.out.println("Withdrew " + amount + " to " + theUser.getName() + "'s account");
+
     }
 
 }
 //test password and email and user
 /*
+User 1
 1234
 1234@gmail.com
 1234qweras
+
+User 2
+4321
+4321@gmail.com
+4321rewqsa
 */
