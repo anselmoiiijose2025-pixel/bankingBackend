@@ -7,13 +7,10 @@ class InvalidEmailException extends Exception{
 }//test not actually used
 
 public class bankingBackend {
-    //the do while/while loops are are for business logic, trying to create negative balances, objective numbers. 21:46
+    //the do while/while loops are for business logic, trying to create negative balances, objective numbers. 21:46
     
-     private static HashMap<String, user> users = new HashMap<>(); //stores by userID
+     private static HashMap<String, user> users = new HashMap<>(); //stores by userID, also the instance variable!
 
-     public bankingBackend(){
-        users = new HashMap<>();
-     }
      //log into the bank, if they fail 3 times, no directions for their password, they'll be locked out
      //account will be frozen too.
 
@@ -35,19 +32,22 @@ public class bankingBackend {
             System.out.println("Password does not meet the requirements");
             //throw new InvalidPasswordException("Password does not meet the requirements");
             //return false; //will return false if any variables are incorrect
+            return false;
         }
         user newUser = new user(theName, thePassword, theEmail);
-        users.put(theEmail,newUser);
+        users.put(theName,newUser);
         return true;
      }
      
-    public user getUser(String email){
-        return users.get(email);
+    public user getUserByName(String name){
+        return users.get(name);
     }
-
     public void removeUser(String userName){
         users.remove(userName);
     }
+    public HashMap<String, user> getUserHash(){
+        return users;
+    } 
      //set a password, has to correctly recall old password 
      
      // wel'll create a transaction method at the end. (deposit / withdraw)
