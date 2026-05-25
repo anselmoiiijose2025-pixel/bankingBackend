@@ -1,16 +1,22 @@
 
+import java.util.UUID;
+import java.util.HashMap;
 //purpose of this is to make transaction tracking clearer, sometimes names overlap
 //but if we track by a special number we can skip over the hassle of finding a name.
 public class transaction {
     private String transactionId;
     private String name;
+    private String email;
     private double amount;
     private String transactionType; // "deposit" or "withdrawal"
 
 
-    public transaction(String transactionId, String name, double amount, String transactionType) {
-        this.transactionId = transactionId;
+
+    
+public transaction(String name, String email,  double amount, String transactionType) {
+        transactionId = UUID.randomUUID().toString();
         this.name = name;
+        this.email = email;
         this.amount = amount;
         this.transactionType = transactionType; 
 }
@@ -21,10 +27,23 @@ public String getTransactionId() {
 public String getName() {
     return name;
 }
+public String getEmail() {
+    return email;
+}
 public double getAmount() {
     return amount;
 }
 public String getTransactionType() {
     return transactionType;
+}
+
+public String toString(){
+    return "TransactionID: " + transactionId + "\nName: " + name +
+     "Email: " + email + "\nAmount(): " + amount +  "\nTransaction Type: " + transactionType;
+}
+
+public void createTransaction(String name2, String email2, double withdrawalAmount, String string) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'createTransaction'");
 }
 }
