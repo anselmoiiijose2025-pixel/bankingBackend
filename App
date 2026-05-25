@@ -1,3 +1,4 @@
+import java.util.HashMap;
 import java.util.Scanner;
 public class App {
     static class InvalidPasswordException extends Exception{
@@ -19,7 +20,7 @@ public class App {
     
         while(true){
         
-            System.out.println("Log in - Create User - Exit");
+            System.out.println("Log in - Create User - Exit - test (skips log in)");
             input = sc.nextLine();
             boolean validate = false;
 
@@ -28,13 +29,13 @@ public class App {
                 validateEntry = false;
                 int count = 0;
                 do{
-                System.out.println("Enter email: ");
-                String eMail = sc.nextLine();
+                System.out.println("Enter user: ");
+                String uSer = sc.nextLine();
                 
                 System.out.println("Enter password: ");
                 String passW = sc.nextLine();
                     //will always pass but will always come back to if password or email is wrong
-                currentUser = bank.getUser(eMail);
+                currentUser = bank.getUserByName(uSer);
                     //so when you enter it'll do the if statement, otherwise you'll just be waiting lol
                 /*object object name = something holding your data.accessor data(paramater for data ) */
                 if(currentUser !=null  && 
@@ -90,15 +91,14 @@ public class App {
                         It will break the while and validate is true when you finally have a correct password
                         */
                         validate = bank.createUser(user,email,pass); //either becomes true or stays false
-                        
+                        if(pass.equals("EXIT")){
+                            break;
+                        }
                         if(validate){
                             System.out.println("Successfully created account!");
                             break;
                         } else {
                              System.out.println("Invalid data (email exists or password rules not met). Try again password.");
-                        }
-                        if(pass.equals("EXIT")){
-                            break;
                         }
                     }
                 }
@@ -107,6 +107,12 @@ public class App {
             case "exit":
                 System.out.println("Thank you for using us!");
                 return;//program ends
+            case "test"://skip this bullshit
+            String theName = "1234";
+            String theEmail = "1234@gmail.com";
+                bank.createUser(theName,theEmail,"1234qweras");
+                currentUser = bank.getUserByName(theName);
+                sesh.theSession(sc, bank, currentUser);
             default: 
                 System.out.println("Please enter a valid action or type exit");
                 break;
@@ -116,5 +122,8 @@ public class App {
     }
       
     } 
+
+}
+
 
 }
