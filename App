@@ -13,14 +13,17 @@ public class App {
         loggedInSession sesh = new loggedInSession();
         bankingBackend bank = new bankingBackend();
 
-        System.out.println("Hello, World!");
+        System.out.println("Hello, World!\n");
         String input = null;
         boolean validateEntry = false;
-    
+            System.out.println("|---------------|");
             bank.loadUsers();
             bank.loadTransactions();
+            System.out.println("|---------------|\n");
         while(true){
+             System.out.println("---------------");
             System.out.println("Log in - Create User - Exit *log in user:1234, pass:1234qweras");
+             System.out.println("---------------");
             input = sc.nextLine();
             boolean validate = false;
 
@@ -29,9 +32,10 @@ public class App {
                 validateEntry = false;
                 int count = 0;
                 do{
-                System.out.println("Enter user: ");
-                String uSer = sc.nextLine();
-                
+                System.out.println("\n---------------");    
+                System.out.print("Enter user: "); String uSer = sc.nextLine();
+
+                System.out.println("\n---------------");
                 System.out.println("Enter password: ");
                 String passW = sc.nextLine();
                     //will always pass but will always come back to if password or email is wrong
@@ -41,6 +45,7 @@ public class App {
                 if(currentUser !=null  && 
                     passW.equals(currentUser.getPassword())){
                      System.out.println("Log in successful! ");
+                    System.out.println("---------------\n");
                     validateEntry = true;
                     
                     sesh.theSession(sc, bank, currentUser);
@@ -48,9 +53,11 @@ public class App {
 
                 } else{
                     System.out.println("Invalid email or password");
+                    System.out.println("---------------\n");
                     count++;
                     if(count==3){
-                        throw new InvalidPasswordException("Too many failed attempts");
+                        throw new InvalidPasswordException("Too many failed attempts\n");
+                        
                         //break; this 
                     }
                     //after this, the program will go back to the top and ask again with a new count value
@@ -63,6 +70,7 @@ public class App {
 
                 while(!validate){
                     System.out.println("Enter username: (First Last, online, etc.)");
+                    
                     String user = sc.nextLine();
 
                     while(user.isBlank()){
@@ -99,14 +107,17 @@ public class App {
                             bank.saveUsers();
                             break;
                         } else {
-                             System.out.println("Invalid data (email exists or password rules not met). Try again password.");
+                             System.out.println("\nInvalid data (email exists or password rules not met). Try again password.");
+                             
                         }
                     }
                 }
                 break;//program goes back to start
             
             case "exit":
+                 System.out.println("--------------");
                 System.out.println("Thank you for using us!");
+                 System.out.println("---------------");
                 bank.saveUsers();
                 bank.saveTransactions();
                 return;//program ends
@@ -117,7 +128,8 @@ public class App {
                 currentUser = bank.getUserByName(theName);
                 sesh.theSession(sc, bank, currentUser);
             default: 
-                System.out.println("Please enter a valid action or type exit");
+                System.out.println("\nPlease enter a valid action or type exit");
+                 System.out.println("---------------");
                 break;
         }
         //after u log in, what can they do?
