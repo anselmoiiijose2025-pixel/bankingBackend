@@ -1,3 +1,4 @@
+import java.io.*;
 import java.util.HashMap;
 
 class InvalidEmailException extends Exception{
@@ -10,6 +11,7 @@ public class bankingBackend {
     //the do while/while loops are for business logic, trying to create negative balances, objective numbers. 21:46
     
      private static HashMap<String, user> users = new HashMap<>(); //stores by userID, also the instance variable!
+     private HashMap<String,transaction> transactions = new HashMap<>();
 
      //log into the bank, if they fail 3 times, no directions for their password, they'll be locked out
      //account will be frozen too.
@@ -48,6 +50,75 @@ public class bankingBackend {
     public HashMap<String, user> getUserHash(){
         return users;
     } 
+    public void addTransaction(String g, transaction t){
+        transactions.put(g, t);
+    }
+    public HashMap<String,transaction> getTransactionHash(){
+        return transactions;
+    }
+    public void saveUsers(){
+        try{
+            FileOutputStream fileOut = new FileOutputStream("users.dat");//the file we're making
+            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);//the writer
+
+            objectOut.writeObject(users);
+            objectOut.writeObject(transactions);
+
+            objectOut.close();
+            fileOut.close();
+            
+        System.out.println("Saved users successfully");
+        }catch(Exception e){
+            System.out.println("Error occured while saving users ");
+        }
+    }
+/*
+for loading in just write the opposite fileInput.. objectInput
+
+*/
+    public void loadUsers(){
+        try{
+            FileInputStream fileIn = new FileInputStream("users.dat");//the file we're grabbing
+            ObjectInputStream objectIn = new ObjectInputStream(fileIn); //the writer
+
+            users = (HashMap<String, user>) objectIn.readObject();
+            
+            objectIn.close();
+            System.out.println("Loaded users successfully");
+        }catch(Exception e){
+            System.out.println("Error occured while loading users");
+        }
+    }
+    public void saveTransactions(){
+ try{
+            FileOutputStream fileOut = new FileOutputStream("transactions.dat");//the file we're making
+            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);//the writer
+
+
+            objectOut.writeObject(transactions);
+
+            objectOut.close();
+            fileOut.close();
+            
+        System.out.println("Saved transcaction history successfully");
+        }catch(Exception e){
+            System.out.println("Error occured while saving transaction history");
+        }
+    }
+    public void loadTransactions(){
+         try{
+            FileInputStream fileIn = new FileInputStream("transactions.dat");//the file we're grabbing
+            ObjectInputStream objectIn = new ObjectInputStream(fileIn); //the writer
+
+        
+            transactions = (HashMap<String,transaction>) objectIn.readObject();
+            objectIn.close();
+
+            System.out.println("Loaded transaction history successfully");
+        }catch(Exception e){
+            System.out.println("Error occured while loading transaction history");
+        }
+    }
      //set a password, has to correctly recall old password 
      
      // wel'll create a transaction method at the end. (deposit / withdraw)
