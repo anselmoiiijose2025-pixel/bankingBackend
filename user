@@ -1,11 +1,13 @@
 import java.util.HashMap; //create a hashmap for individual tracking of transactions..
-public class user {
+import java.io.*;
+public class user implements Serializable{
     private String name;
     private String password;
     private String email;
     private double balance;
+    private HashMap<String,transaction> transactions = new HashMap<>();
 
-    public user(String name, String password, String email) {
+    public user(String name, String password, String email){
         this.name = name;
         this.password = password;
         this.email = email;
@@ -38,5 +40,8 @@ public class user {
     }
     public double subtractBalance(double amount){
         return balance-=amount;
+    }
+    public HashMap<String,transaction> getTransactionList(){
+        return transactions;
     }
 }
