@@ -1,9 +1,9 @@
-
 import java.util.UUID;
-import java.util.HashMap;
+import java.io.*;
+//import java.util.HashMap;
 //purpose of this is to make transaction tracking clearer, sometimes names overlap
 //but if we track by a special number we can skip over the hassle of finding a name.
-public class transaction {
+public class transaction implements Serializable{
     private String transactionId;
     private String name;
     private String email;
@@ -38,8 +38,10 @@ public String getTransactionType() {
 }
 
 public String toString(){
-    return "TransactionID: " + transactionId + "\nName: " + name +
-     "Email: " + email + "\nAmount(): " + amount +  "\nTransaction Type: " + transactionType;
+    return "\n________________________\nTransactionID: " + transactionId + "\nName: " + name +
+     "\nEmail: " + email + "\nAmount(): " + amount +  "\nTransaction Type: " + transactionType 
+     +"\n________________________\n";
+
 }
 
 public void createTransaction(String name2, String email2, double withdrawalAmount, String string) {
