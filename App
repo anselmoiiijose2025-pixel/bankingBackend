@@ -1,4 +1,4 @@
-import java.util.HashMap;
+//import java.util.HashMap;
 import java.util.Scanner;
 public class App {
     static class InvalidPasswordException extends Exception{
@@ -17,10 +17,10 @@ public class App {
         String input = null;
         boolean validateEntry = false;
     
-    
+            bank.loadUsers();
+            bank.loadTransactions();
         while(true){
-        
-            System.out.println("Log in - Create User - Exit - test (skips log in)");
+            System.out.println("Log in - Create User - Exit *log in user:1234, pass:1234qweras");
             input = sc.nextLine();
             boolean validate = false;
 
@@ -96,6 +96,7 @@ public class App {
                         }
                         if(validate){
                             System.out.println("Successfully created account!");
+                            bank.saveUsers();
                             break;
                         } else {
                              System.out.println("Invalid data (email exists or password rules not met). Try again password.");
@@ -106,6 +107,8 @@ public class App {
             
             case "exit":
                 System.out.println("Thank you for using us!");
+                bank.saveUsers();
+                bank.saveTransactions();
                 return;//program ends
             case "test"://skip this bullshit
             String theName = "1234";
@@ -122,8 +125,5 @@ public class App {
     }
       
     } 
-
-}
-
 
 }
